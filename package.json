@@ -1,0 +1,18 @@
+{
+  "name": "replyrocket",
+  "private": true,
+  "version": "0.1.0",
+  "packageManager": "pnpm@10.9.7",
+  "scripts": {
+    "dev:web": "pnpm --filter @replyrocket/web dev",
+    "dev:ext": "pnpm --filter @replyrocket/extension dev",
+    "build:web": "pnpm --filter @replyrocket/web build",
+    "build:ext": "pnpm --filter @replyrocket/extension build",
+    "build": "pnpm -r build",
+    "lint": "pnpm -r lint",
+    "typecheck": "pnpm -r typecheck"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

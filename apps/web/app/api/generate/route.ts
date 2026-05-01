@@ -79,7 +79,9 @@ export async function POST(req: NextRequest) {
   ]);
 
   const firstName = profileRes.data?.full_name?.split(" ")[0] ?? null;
-  const recentSamples = (samplesRes.data ?? []).map((r) => r.content);
+  const recentSamples = (samplesRes.data ?? []).map(
+    (r: { content: string }) => r.content,
+  );
 
   const system = buildGenerateSystemPrompt({
     voice: voiceRes.data ?? defaultVoice(userId),
@@ -102,8 +104,11 @@ export async function POST(req: NextRequest) {
     promptTokens = response.usage.input_tokens;
     completionTokens = response.usage.output_tokens;
     const text = response.content
-      .filter((b): b is { type: "text"; text: string } => b.type === "text")
-      .map((b) => b.text)
+      .filter(
+        (b: { type: string }): b is { type: "text"; text: string } =>
+          b.type === "text",
+      )
+      .map((b: { text: string }) => b.text)
       .join("");
     drafts = parseDrafts(text);
   } catch (e) {

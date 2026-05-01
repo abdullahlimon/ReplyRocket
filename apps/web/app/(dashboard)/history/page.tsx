@@ -3,6 +3,16 @@ import { PLATFORM_LABELS, TONE_LABELS, GOAL_LABELS } from "@replyrocket/shared";
 import type { Platform, Tone, Goal } from "@replyrocket/shared";
 import { createClient } from "@/lib/supabase/server";
 
+interface HistoryRow {
+  id: string;
+  platform: string;
+  tone: string;
+  goal: string;
+  incoming_message: string;
+  created_at: string;
+  selected_draft_id: string | null;
+}
+
 export default async function HistoryPage() {
   const supabase = await createClient();
   const {
@@ -31,7 +41,7 @@ export default async function HistoryPage() {
           </div>
         ) : (
           <ul className="divide-y">
-            {replies!.map((r) => (
+            {(replies as HistoryRow[]).map((r) => (
               <li key={r.id}>
                 <Link
                   href={`/history/${r.id}`}

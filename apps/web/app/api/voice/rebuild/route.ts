@@ -41,7 +41,9 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const userMessage = buildExtractVoiceUserMessage(samples.map((s) => s.content));
+  const userMessage = buildExtractVoiceUserMessage(
+    samples.map((s: { content: string }) => s.content),
+  );
 
   let parsed: Record<string, unknown>;
   try {
@@ -52,8 +54,11 @@ export async function POST(req: NextRequest) {
       messages: [{ role: "user", content: userMessage }],
     });
     const text = response.content
-      .filter((b): b is { type: "text"; text: string } => b.type === "text")
-      .map((b) => b.text)
+      .filter(
+        (b: { type: string }): b is { type: "text"; text: string } =>
+          b.type === "text",
+      )
+      .map((b: { text: string }) => b.text)
       .join("")
       .trim()
       .replace(/^```(?:json)?/, "")

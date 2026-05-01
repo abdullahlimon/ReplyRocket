@@ -2,7 +2,7 @@
   "name": "replyrocket",
   "private": true,
   "version": "0.1.0",
-  "packageManager": "pnpm@10.9.7",
+  "packageManager": "pnpm@10.33.2",
   "scripts": {
     "dev:web": "pnpm --filter @replyrocket/web dev",
     "dev:ext": "pnpm --filter @replyrocket/extension dev",

@@ -9,7 +9,7 @@ import {
   type Platform,
   type Tone,
 } from "@replyrocket/shared";
-import { sendBg, type Reply } from "~lib/messaging";
+import { sendBg } from "~lib/messaging";
 import { KEYS, storage } from "~lib/storage";
 
 interface Props {
@@ -55,7 +55,7 @@ export function Popover({
     await storage.set(KEYS.LAST_TONE, tone);
     await storage.set(KEYS.LAST_GOAL, goal);
 
-    const res: Reply<{ reply_id: string; drafts: Draft[] }> = await sendBg({
+    const res = await sendBg<{ reply_id: string; drafts: Draft[] }>({
       type: "GENERATE_REPLY",
       payload: {
         incoming_message: incoming,
@@ -66,7 +66,7 @@ export function Popover({
       },
     });
     setLoading(false);
-    if (!res.ok) {
+    if (res.ok === false) {
       setError(prettyError(res.error));
       return;
     }

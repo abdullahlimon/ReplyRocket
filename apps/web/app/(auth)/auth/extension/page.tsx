@@ -37,8 +37,21 @@ export default function ExtensionAuthBridge() {
       const extensionId =
         new URLSearchParams(window.location.search).get("ext") ||
         process.env.NEXT_PUBLIC_EXTENSION_ID;
-      if (extensionId && typeof chrome !== "undefined" && chrome.runtime?.sendMessage) {
-        chrome.runtime.sendMessage(
+      const chromeGlobal = (
+        window as unknown as {
+          chrome?: {
+            runtime?: {
+              sendMessage?: (
+                id: string,
+                msg: unknown,
+                cb: () => void,
+              ) => void;
+            };
+          };
+        }
+      ).chrome;
+      if (extensionId && chromeGlobal?.runtime?.sendMessage) {
+        chromeGlobal.runtime.sendMessage(
           extensionId,
           { type: "REPLYROCKET_AUTH", token: json.token },
           () => {},

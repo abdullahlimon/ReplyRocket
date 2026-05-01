@@ -1,15 +1,31 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 
 export default function Login() {
+  return (
+    <Suspense>
+      <LoginInner />
+    </Suspense>
+  );
+}
+
+function LoginInner() {
   const supabase = createClient();
+  const params = useSearchParams();
+  const next = params.get("next") || "/dashboard";
+  const initialError = params.get("error");
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">(
-    "idle",
+    initialError ? "error" : "idle",
   );
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(initialError);
+
+  function callbackUrl() {
+    return `${window.location.origin}/auth/callback?next=${encodeURIComponent(next)}`;
+  }
 
   async function sendMagicLink(e: React.FormEvent) {
     e.preventDefault();
@@ -17,9 +33,7 @@ export default function Login() {
     setError(null);
     const { error } = await supabase.auth.signInWithOtp({
       email,
-      options: {
-        emailRedirectTo: `${window.location.origin}/dashboard`,
-      },
+      options: { emailRedirectTo: callbackUrl() },
     });
     if (error) {
       setStatus("error");
@@ -32,7 +46,7 @@ export default function Login() {
   async function signInWithGoogle() {
     await supabase.auth.signInWithOAuth({
       provider: "google",
-      options: { redirectTo: `${window.location.origin}/dashboard` },
+      options: { redirectTo: callbackUrl() },
     });
   }
 

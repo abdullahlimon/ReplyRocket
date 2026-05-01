@@ -1,8 +1,12 @@
 "use client";
 
+import Link from "next/link";
 import { Suspense, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import { Button } from "@/components/ui/button";
+import { Card, CardBody } from "@/components/ui/card";
+import { Input, Label } from "@/components/ui/input";
 
 export default function Login() {
   return (
@@ -52,50 +56,70 @@ function LoginInner() {
 
   return (
     <main className="flex min-h-screen items-center justify-center px-6">
-      <div className="w-full max-w-sm rounded-2xl border bg-white p-8 shadow-sm">
-        <h1 className="text-2xl font-semibold">Sign in to ReplyRocket</h1>
-        <p className="mt-1 text-sm text-gray-600">
-          We&rsquo;ll email you a magic link.
-        </p>
-
-        <button
-          onClick={signInWithGoogle}
-          className="mt-6 flex w-full items-center justify-center rounded-lg border px-4 py-2 text-sm font-medium hover:bg-gray-50"
+      <div className="w-full max-w-sm">
+        <Link
+          href="/"
+          className="mb-6 flex items-center justify-center gap-2 text-lg font-bold tracking-tight"
         >
-          Continue with Google
-        </button>
+          <span>🚀</span>
+          <span>ReplyRocket</span>
+        </Link>
 
-        <div className="my-6 flex items-center gap-3 text-xs text-gray-400">
-          <span className="h-px flex-1 bg-gray-200" />
-          OR
-          <span className="h-px flex-1 bg-gray-200" />
-        </div>
-
-        <form onSubmit={sendMagicLink} className="space-y-3">
-          <input
-            type="email"
-            required
-            placeholder="you@work.com"
-            className="w-full rounded-lg border px-3 py-2 text-sm focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <button
-            type="submit"
-            disabled={status === "sending"}
-            className="w-full rounded-lg bg-brand-600 px-4 py-2 text-sm font-medium text-white hover:bg-brand-700 disabled:opacity-60"
-          >
-            {status === "sending" ? "Sending..." : "Email me a magic link"}
-          </button>
-          {status === "sent" && (
-            <p className="text-sm text-green-600">
-              Check your inbox for the link.
+        <Card>
+          <CardBody className="p-7">
+            <h1 className="text-xl font-semibold tracking-tight">Sign in</h1>
+            <p className="mt-1 text-sm text-gray-600">
+              Continue with Google or email a magic link.
             </p>
-          )}
-          {status === "error" && (
-            <p className="text-sm text-red-600">{error}</p>
-          )}
-        </form>
+
+            <Button
+              onClick={signInWithGoogle}
+              variant="outline"
+              className="mt-6 w-full"
+            >
+              Continue with Google
+            </Button>
+
+            <div className="my-5 flex items-center gap-3 text-xs text-gray-400">
+              <span className="h-px flex-1 bg-gray-200" />
+              OR
+              <span className="h-px flex-1 bg-gray-200" />
+            </div>
+
+            <form onSubmit={sendMagicLink} className="space-y-3">
+              <div>
+                <Label htmlFor="email" className="sr-only">
+                  Email
+                </Label>
+                <Input
+                  id="email"
+                  type="email"
+                  required
+                  placeholder="you@work.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </div>
+              <Button type="submit" loading={status === "sending"} className="w-full">
+                Email me a magic link
+              </Button>
+              {status === "sent" && (
+                <p className="text-center text-sm text-green-600">
+                  Check your inbox.
+                </p>
+              )}
+              {status === "error" && error && (
+                <p className="text-center text-sm text-red-600">{error}</p>
+              )}
+            </form>
+          </CardBody>
+        </Card>
+
+        <p className="mt-4 text-center text-xs text-gray-500">
+          By signing in, you agree to our{" "}
+          <Link href="/terms" className="underline">Terms</Link> and{" "}
+          <Link href="/privacy" className="underline">Privacy Policy</Link>.
+        </p>
       </div>
     </main>
   );

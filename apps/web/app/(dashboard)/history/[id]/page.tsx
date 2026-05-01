@@ -9,6 +9,8 @@ import {
   type Tone,
 } from "@replyrocket/shared";
 import { createClient } from "@/lib/supabase/server";
+import { Card } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 
 export default async function HistoryDetail({
   params,
@@ -33,52 +35,66 @@ export default async function HistoryDetail({
   const drafts = (reply.drafts as Draft[]) ?? [];
 
   return (
-    <div className="mx-auto max-w-3xl">
-      <div className="text-xs uppercase tracking-wide text-gray-500">
-        {PLATFORM_LABELS[reply.platform as Platform]} ·{" "}
-        {TONE_LABELS[reply.tone as Tone]} · {GOAL_LABELS[reply.goal as Goal]}
+    <div className="mx-auto max-w-3xl space-y-6">
+      <div className="flex flex-wrap gap-2">
+        <Badge variant="muted">{PLATFORM_LABELS[reply.platform as Platform]}</Badge>
+        <Badge variant="muted">{TONE_LABELS[reply.tone as Tone]}</Badge>
+        <Badge variant="muted">{GOAL_LABELS[reply.goal as Goal]}</Badge>
+        <span className="ml-auto text-xs text-gray-500">
+          {new Date(reply.created_at).toLocaleString()}
+        </span>
       </div>
 
-      <h2 className="mt-2 text-xl font-semibold">Incoming</h2>
-      <pre className="mt-2 whitespace-pre-wrap rounded-xl border bg-white p-4 text-sm">
-        {reply.incoming_message}
-      </pre>
+      <section>
+        <h2 className="text-sm font-semibold uppercase tracking-wider text-gray-500">
+          Incoming
+        </h2>
+        <Card className="mt-2 p-4">
+          <pre className="whitespace-pre-wrap font-sans text-sm leading-relaxed">
+            {reply.incoming_message}
+          </pre>
+        </Card>
+      </section>
 
-      <h2 className="mt-8 text-xl font-semibold">Drafts</h2>
-      <div className="mt-3 space-y-3">
-        {drafts.map((d) => {
-          const selected = d.id === reply.selected_draft_id;
-          return (
-            <div
-              key={d.id}
-              className={`rounded-xl border bg-white p-4 ${
-                selected ? "border-brand-500 ring-1 ring-brand-500/30" : ""
-              }`}
-            >
-              <div className="flex items-center justify-between text-xs text-gray-500">
-                <span>Draft #{d.id}</span>
-                {selected && (
-                  <span className="rounded-full bg-brand-50 px-2 py-0.5 text-brand-700">
-                    Inserted
-                  </span>
+      <section>
+        <h2 className="text-sm font-semibold uppercase tracking-wider text-gray-500">
+          Drafts
+        </h2>
+        <div className="mt-2 space-y-3">
+          {drafts.map((d, i) => {
+            const selected = d.id === reply.selected_draft_id;
+            return (
+              <Card
+                key={d.id}
+                className={selected ? "p-4 ring-2 ring-brand-500/40" : "p-4"}
+              >
+                <div className="flex items-center justify-between text-xs text-gray-500">
+                  <span>Draft {i + 1}</span>
+                  {selected && <Badge variant="success">Inserted</Badge>}
+                </div>
+                <pre className="mt-2 whitespace-pre-wrap font-sans text-sm leading-relaxed">
+                  {d.text}
+                </pre>
+                {d.rationale && (
+                  <p className="mt-2 text-xs italic text-gray-500">{d.rationale}</p>
                 )}
-              </div>
-              <p className="mt-2 whitespace-pre-wrap text-sm">{d.text}</p>
-              {d.rationale && (
-                <p className="mt-2 text-xs italic text-gray-500">{d.rationale}</p>
-              )}
-            </div>
-          );
-        })}
-      </div>
+              </Card>
+            );
+          })}
+        </div>
+      </section>
 
       {reply.edited_text && (
-        <>
-          <h2 className="mt-8 text-xl font-semibold">Final sent</h2>
-          <pre className="mt-2 whitespace-pre-wrap rounded-xl border bg-white p-4 text-sm">
-            {reply.edited_text}
-          </pre>
-        </>
+        <section>
+          <h2 className="text-sm font-semibold uppercase tracking-wider text-gray-500">
+            Final sent
+          </h2>
+          <Card className="mt-2 p-4">
+            <pre className="whitespace-pre-wrap font-sans text-sm leading-relaxed">
+              {reply.edited_text}
+            </pre>
+          </Card>
+        </section>
       )}
     </div>
   );

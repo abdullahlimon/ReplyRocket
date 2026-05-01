@@ -1,28 +1,45 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 
-export default async function DashboardOverview() {
+export default async function DashboardOverview({
+  searchParams,
+}: {
+  searchParams: Promise<{ welcome?: string }>;
+}) {
   const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) return null;
 
-  const [{ data: profile }, { count: replyCount }] = await Promise.all([
-    supabase.from("profiles").select("*").eq("id", user.id).single(),
-    supabase
-      .from("replies")
-      .select("*", { count: "exact", head: true })
-      .eq("user_id", user.id),
-  ]);
+  const [{ data: profile }, { count: replyCount }, { count: sampleCount }] =
+    await Promise.all([
+      supabase.from("profiles").select("*").eq("id", user.id).single(),
+      supabase
+        .from("replies")
+        .select("*", { count: "exact", head: true })
+        .eq("user_id", user.id),
+      supabase
+        .from("voice_samples")
+        .select("*", { count: "exact", head: true })
+        .eq("user_id", user.id),
+    ]);
+
+  const params = await searchParams;
+  if ((sampleCount ?? 0) === 0 && !params.welcome) redirect("/onboarding");
 
   return (
     <div className="mx-auto max-w-4xl">
       <h1 className="text-2xl font-semibold">
-        Welcome back{profile?.full_name ? `, ${profile.full_name.split(" ")[0]}` : ""}.
+        {params.welcome
+          ? `You're all set${profile?.full_name ? `, ${profile.full_name.split(" ")[0]}` : ""}! 🚀`
+          : `Welcome back${profile?.full_name ? `, ${profile.full_name.split(" ")[0]}` : ""}.`}
       </h1>
       <p className="mt-1 text-sm text-gray-600">
-        Install the Chrome extension to start generating replies.
+        {params.welcome
+          ? "Install the extension and try it out — your voice profile is ready."
+          : "Install the Chrome extension to start generating replies."}
       </p>
 
       <div className="mt-8 grid gap-4 sm:grid-cols-3">

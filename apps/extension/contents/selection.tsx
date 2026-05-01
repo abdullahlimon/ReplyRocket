@@ -4,7 +4,7 @@ import type {
 } from "plasmo";
 import { useEffect, useState } from "react";
 import { detectPlatform } from "~lib/adapters";
-import { Popover } from "./popover";
+import { Popover } from "~components/popover";
 
 export const config: PlasmoCSConfig = {
   matches: [

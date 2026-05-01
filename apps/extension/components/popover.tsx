@@ -36,6 +36,8 @@ export function Popover({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [signedIn, setSignedIn] = useState<boolean | null>(null);
+  const [quota, setQuota] = useState<{ used: number; quota: number } | null>(null);
+  const [copiedId, setCopiedId] = useState<string | null>(null);
 
   useEffect(() => {
     (async () => {
@@ -55,7 +57,11 @@ export function Popover({
     await storage.set(KEYS.LAST_TONE, tone);
     await storage.set(KEYS.LAST_GOAL, goal);
 
-    const res = await sendBg<{ reply_id: string; drafts: Draft[] }>({
+    const res = await sendBg<{
+      reply_id: string;
+      drafts: Draft[];
+      quota?: { used: number; quota: number };
+    }>({
       type: "GENERATE_REPLY",
       payload: {
         incoming_message: incoming,
@@ -72,6 +78,13 @@ export function Popover({
     }
     setDrafts(res.data.drafts);
     setReplyId(res.data.reply_id);
+    if (res.data.quota) setQuota(res.data.quota);
+  }
+
+  function copy(d: Draft) {
+    navigator.clipboard.writeText(d.text);
+    setCopiedId(d.id);
+    setTimeout(() => setCopiedId((c) => (c === d.id ? null : c)), 1200);
   }
 
   async function pick(d: Draft) {
@@ -133,6 +146,18 @@ export function Popover({
 
           {error && <div className="rr-error">{error}</div>}
 
+          {loading && !drafts && (
+            <div className="rr-drafts">
+              {[0, 1, 2].map((i) => (
+                <div key={i} className="rr-draft rr-skeleton">
+                  <div className="rr-line" style={{ width: "92%" }} />
+                  <div className="rr-line" style={{ width: "78%" }} />
+                  <div className="rr-line" style={{ width: "60%" }} />
+                </div>
+              ))}
+            </div>
+          )}
+
           {drafts && (
             <div className="rr-drafts">
               {drafts.map((d) => (
@@ -143,15 +168,18 @@ export function Popover({
                     <button className="rr-mini-primary" onClick={() => pick(d)}>
                       Insert
                     </button>
-                    <button
-                      className="rr-mini"
-                      onClick={() => navigator.clipboard.writeText(d.text)}
-                    >
-                      Copy
+                    <button className="rr-mini" onClick={() => copy(d)}>
+                      {copiedId === d.id ? "Copied" : "Copy"}
                     </button>
                   </div>
                 </div>
               ))}
+            </div>
+          )}
+
+          {quota && (
+            <div className="rr-quota">
+              {quota.quota - quota.used} of {quota.quota} replies left this month
             </div>
           )}
         </div>
@@ -249,4 +277,8 @@ const styles = `
 }
 .rr-mini { background: #f3f4f6; border: 1px solid #e5e7eb; color: #374151; }
 .rr-mini-primary { background: #4f46e5; color: #fff; border: 0; }
+.rr-skeleton { background: #fafafa; }
+.rr-line { height: 9px; background: linear-gradient(90deg,#eee,#f7f7f7,#eee); background-size: 200% 100%; border-radius: 4px; margin-bottom: 6px; animation: rr-shimmer 1.4s infinite; }
+@keyframes rr-shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+.rr-quota { margin-top: 10px; font-size: 11px; color: #6b7280; text-align: center; }
 `;

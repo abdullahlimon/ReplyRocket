@@ -4,13 +4,12 @@ export default function Landing() {
   return (
     <main className="mx-auto flex min-h-screen max-w-5xl flex-col px-6">
       <nav className="flex items-center justify-between py-6">
-        <span className="text-xl font-bold tracking-tight">
+        <Link href="/" className="text-xl font-bold tracking-tight">
           🚀 ReplyRocket
-        </span>
-        <div className="flex items-center gap-4 text-sm">
-          <Link href="/login" className="hover:underline">
-            Sign in
-          </Link>
+        </Link>
+        <div className="flex items-center gap-5 text-sm">
+          <Link href="/pricing" className="hover:underline">Pricing</Link>
+          <Link href="/login" className="hover:underline">Sign in</Link>
           <Link
             href="/login"
             className="rounded-lg bg-brand-600 px-4 py-2 font-medium text-white hover:bg-brand-700"
@@ -48,8 +47,13 @@ export default function Landing() {
         </p>
       </section>
 
-      <footer className="border-t py-6 text-sm text-gray-500">
-        © {new Date().getFullYear()} ReplyRocket
+      <footer className="flex flex-wrap items-center justify-between gap-4 border-t py-6 text-sm text-gray-500">
+        <span>© {new Date().getFullYear()} ReplyRocket</span>
+        <div className="flex gap-5">
+          <Link href="/pricing" className="hover:underline">Pricing</Link>
+          <Link href="/privacy" className="hover:underline">Privacy</Link>
+          <Link href="/terms" className="hover:underline">Terms</Link>
+        </div>
       </footer>
     </main>
   );

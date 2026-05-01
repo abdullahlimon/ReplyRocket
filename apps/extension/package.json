@@ -38,13 +38,13 @@
       "https://web.whatsapp.com/*",
       "https://x.com/*",
       "https://twitter.com/*",
-      "https://app.replyrocket.io/*",
+      "https://reply-rocket-web.vercel.app/*",
       "http://localhost:3000/*"
     ],
     "permissions": ["storage", "activeTab", "scripting"],
     "externally_connectable": {
       "matches": [
-        "https://app.replyrocket.io/*",
+        "https://reply-rocket-web.vercel.app/*",
         "http://localhost:3000/*"
       ]
     }

@@ -18,7 +18,7 @@ supabase/
 ## Stack
 
 - **Frontend / API:** Next.js 15 (App Router) + TypeScript + Tailwind CSS
-- **AI:** Claude 3.5 Sonnet via `@anthropic-ai/sdk`
+- **AI:** Google Gemini 2.0 Flash (free tier, swappable). Get a free key at [aistudio.google.com](https://aistudio.google.com/app/apikey).
 - **DB + Auth:** Supabase (PostgreSQL + Supabase Auth, RLS on every table)
 - **Extension:** Plasmo, Chrome MV3, single content-script scoped to the 6 platforms
 

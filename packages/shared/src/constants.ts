@@ -59,5 +59,5 @@ export const PLATFORM_LABELS: Record<(typeof PLATFORMS)[number], string> = {
 };
 
 export const DEFAULT_QUOTA = 30;
-export const MODEL_ID = "claude-3-5-sonnet-latest";
+export const MODEL_ID = "gemini-2.0-flash";
 export const MAX_INCOMING_CHARS = 8000;

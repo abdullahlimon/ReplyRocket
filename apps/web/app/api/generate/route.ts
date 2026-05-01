@@ -3,12 +3,11 @@ import { z } from "zod";
 import {
   GOALS,
   MAX_INCOMING_CHARS,
-  MODEL_ID,
   PLATFORMS,
   TONES,
   type Draft,
 } from "@replyrocket/shared";
-import { anthropic } from "@/lib/anthropic";
+import { generateJson } from "@/lib/llm";
 import { authFromBearer } from "@/lib/auth";
 import { createAdminClient, createClient } from "@/lib/supabase/server";
 import {
@@ -90,27 +89,21 @@ export async function POST(req: NextRequest) {
   });
   const userMessage = buildGenerateUserMessage(body);
 
-  // 5. Call Claude
+  // 5. Call the LLM
   let drafts: Draft[];
   let promptTokens: number | null = null;
   let completionTokens: number | null = null;
+  let modelUsed = "unknown";
   try {
-    const response = await anthropic().messages.create({
-      model: MODEL_ID,
-      max_tokens: 1024,
+    const response = await generateJson({
       system,
-      messages: [{ role: "user", content: userMessage }],
+      user: userMessage,
+      max_tokens: 1024,
     });
-    promptTokens = response.usage.input_tokens;
-    completionTokens = response.usage.output_tokens;
-    const text = response.content
-      .filter(
-        (b: { type: string }): b is { type: "text"; text: string } =>
-          b.type === "text",
-      )
-      .map((b: { text: string }) => b.text)
-      .join("");
-    drafts = parseDrafts(text);
+    modelUsed = response.model;
+    promptTokens = response.prompt_tokens;
+    completionTokens = response.completion_tokens;
+    drafts = parseDrafts(response.text);
   } catch (e) {
     return NextResponse.json(
       { error: "generation_failed", detail: String(e) },
@@ -129,7 +122,7 @@ export async function POST(req: NextRequest) {
       incoming_message: body.incoming_message,
       thread_context: body.thread_context ?? null,
       drafts,
-      model: MODEL_ID,
+      model: modelUsed,
       prompt_tokens: promptTokens,
       completion_tokens: completionTokens,
     })

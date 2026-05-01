@@ -1,6 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { MODEL_ID } from "@replyrocket/shared";
-import { anthropic } from "@/lib/anthropic";
+import { generateJson } from "@/lib/llm";
 import { authFromBearer } from "@/lib/auth";
 import { createAdminClient, createClient } from "@/lib/supabase/server";
 import {
@@ -47,19 +46,13 @@ export async function POST(req: NextRequest) {
 
   let parsed: Record<string, unknown>;
   try {
-    const response = await anthropic().messages.create({
-      model: MODEL_ID,
-      max_tokens: 800,
+    const response = await generateJson({
       system: EXTRACT_VOICE_SYSTEM,
-      messages: [{ role: "user", content: userMessage }],
+      user: userMessage,
+      max_tokens: 800,
+      temperature: 0.3,
     });
-    const text = response.content
-      .filter(
-        (b: { type: string }): b is { type: "text"; text: string } =>
-          b.type === "text",
-      )
-      .map((b: { text: string }) => b.text)
-      .join("")
+    const text = response.text
       .trim()
       .replace(/^```(?:json)?/, "")
       .replace(/```$/, "");

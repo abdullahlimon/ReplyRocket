@@ -5,7 +5,8 @@ import type {
 } from "@replyrocket/shared";
 
 export const API_URL =
-  process.env.PLASMO_PUBLIC_API_URL || "http://localhost:3000";
+  process.env.PLASMO_PUBLIC_API_URL ||
+  "https://reply-rocket-web.vercel.app";
 
 interface ApiOptions {
   token: string;

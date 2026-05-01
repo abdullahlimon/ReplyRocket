@@ -17,31 +17,37 @@ const FEATURES = [
     icon: "✍️",
     title: "Sounds like you",
     body: "Trains on samples of your own writing so the drafts match your voice — not a generic AI tone.",
+    accent: "from-violet-500 to-indigo-600",
   },
   {
     icon: "🎯",
     title: "Tone + goal aware",
     body: "Pick the tone (Friendly, Direct, Empathetic…) and the goal (Follow up, Decline, Negotiate…). Three drafts, real choices.",
+    accent: "from-rose-500 to-pink-600",
   },
   {
     icon: "⚡",
     title: "2 seconds, 3 drafts",
     body: "Highlight the message, click the rocket, get three meaningfully different replies. Insert with one click.",
+    accent: "from-amber-500 to-orange-600",
   },
   {
     icon: "🔒",
     title: "Only what you highlight",
     body: "We never read your inbox. The extension only sees text you actively select — nothing else.",
+    accent: "from-emerald-500 to-teal-600",
   },
   {
     icon: "🧠",
     title: "Learns over time",
     body: "Every reply you send through ReplyRocket sharpens your voice profile. It gets better the more you use it.",
+    accent: "from-sky-500 to-blue-600",
   },
   {
     icon: "🌐",
     title: "Six platforms",
     body: "Gmail, Outlook, LinkedIn, Slack, WhatsApp Web, and X — all with one extension.",
+    accent: "from-fuchsia-500 to-purple-600",
   },
 ];
 
@@ -277,10 +283,15 @@ function Features() {
 
       <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {FEATURES.map((f) => (
-          <Card key={f.title} className="p-6">
-            <div className="text-2xl">{f.icon}</div>
-            <h3 className="mt-3 text-base font-semibold">{f.title}</h3>
-            <p className="mt-1.5 text-sm text-gray-600">{f.body}</p>
+          <Card key={f.title} className="overflow-hidden p-0 transition-transform hover:-translate-y-0.5">
+            <div className={`h-1 bg-gradient-to-r ${f.accent}`} />
+            <div className="p-6">
+              <div className={`inline-flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br ${f.accent} text-xl text-white shadow-sm`}>
+                {f.icon}
+              </div>
+              <h3 className="mt-3 text-base font-semibold">{f.title}</h3>
+              <p className="mt-1.5 text-sm text-gray-600">{f.body}</p>
+            </div>
           </Card>
         ))}
       </div>

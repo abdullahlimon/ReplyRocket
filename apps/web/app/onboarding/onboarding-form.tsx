@@ -51,26 +51,35 @@ export default function OnboardingForm() {
   async function submit() {
     setSubmitting(true);
     const cleaned = samples.map((s) => s.trim()).filter((s) => s.length >= 20);
-    const samplesRes = await fetch("/api/voice/samples", {
+    const res = await fetch("/api/onboarding", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ samples: cleaned, source: "onboarding" }),
+      body: JSON.stringify({ samples: cleaned }),
     });
-    if (!samplesRes.ok) {
+    if (!res.ok) {
       setSubmitting(false);
       toast.push({
         variant: "error",
         title: "Couldn't save samples",
-        description: await samplesRes.text(),
+        description: await res.text(),
       });
       return;
     }
-    await fetch("/api/voice/rebuild", { method: "POST" });
+    // Fire-and-forget: voice rebuild can run while user lands on the dashboard.
+    void fetch("/api/voice/rebuild", { method: "POST" });
     router.push("/dashboard?welcome=1");
+    router.refresh();
   }
 
-  function skip() {
+  async function skip() {
+    setSubmitting(true);
+    await fetch("/api/onboarding", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ skipped: true }),
+    });
     router.push("/dashboard?welcome=1");
+    router.refresh();
   }
 
   const prompt = PROMPTS[step]!;

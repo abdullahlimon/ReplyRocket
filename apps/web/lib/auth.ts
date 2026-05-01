@@ -11,6 +11,23 @@ export async function requireUser() {
 }
 
 /**
+ * Returns the current user iff they have role='admin' in profiles.
+ * Returns null otherwise (caller should redirect / 401).
+ */
+export async function requireAdmin() {
+  const session = await requireUser();
+  if (!session) return null;
+  const admin = createAdminClient();
+  const { data } = await admin
+    .from("profiles")
+    .select("role")
+    .eq("id", session.user.id)
+    .maybeSingle();
+  if (data?.role !== "admin") return null;
+  return { ...session, admin };
+}
+
+/**
  * The Chrome extension authenticates with a long-lived bearer token issued
  * by /api/auth/extension. We hash and look it up in extension_sessions.
  */

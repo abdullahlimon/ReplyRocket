@@ -22,7 +22,7 @@ export default async function DashboardLayout({
   const isAdmin = profile?.role === "admin";
 
   return (
-    <div className="flex min-h-screen bg-[#fafafb]">
+    <div className="flex min-h-screen dashboard-bg">
       <Sidebar email={user.email ?? ""} isAdmin={isAdmin} />
       <main className="flex-1 px-5 py-8 sm:px-10">{children}</main>
     </div>

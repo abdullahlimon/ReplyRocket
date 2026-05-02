@@ -61,8 +61,8 @@ export default function ExtensionAuthBridge() {
   }, [supabase]);
 
   return (
-    <main className="flex min-h-screen items-center justify-center px-6">
-      <div className="w-full max-w-md rounded-2xl border bg-white p-8 text-center shadow-sm">
+    <main className="hero-bg flex min-h-screen items-center justify-center px-6">
+      <div className="w-full max-w-md rounded-2xl border border-violet-100 bg-white p-8 text-center shadow-xl shadow-violet-900/5">
         {status === "loading" && <p>Connecting…</p>}
         {status === "needs_login" && (
           <>

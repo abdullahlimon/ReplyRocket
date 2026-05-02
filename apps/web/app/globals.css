@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 :root {
-  --background: 250 250 251;
+  --background: 248 247 255;     /* very light lavender */
   --foreground: 17 24 39;
 }
 
@@ -27,10 +27,38 @@ body {
     background-size: 32px 32px;
   }
   .gradient-text {
-    background: linear-gradient(135deg, #6366f1, #4338ca);
+    background: linear-gradient(135deg, #6366f1, #d946ef);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
+  }
+
+  /* Soft pastel mesh background for marketing pages */
+  .mesh-bg {
+    background-color: #f8f7ff;
+    background-image:
+      radial-gradient(at 12% 18%, rgba(139, 92, 246, 0.18) 0, transparent 50%),
+      radial-gradient(at 88% 12%, rgba(217, 70, 239, 0.16) 0, transparent 50%),
+      radial-gradient(at 80% 92%, rgba(56, 189, 248, 0.18) 0, transparent 50%),
+      radial-gradient(at 20% 80%, rgba(16, 185, 129, 0.14) 0, transparent 50%);
+  }
+
+  /* Brighter blob backdrop for hero sections */
+  .hero-bg {
+    background:
+      radial-gradient(at 25% 18%, rgba(139, 92, 246, 0.28) 0, transparent 55%),
+      radial-gradient(at 80% 8%, rgba(244, 114, 182, 0.24) 0, transparent 50%),
+      radial-gradient(at 70% 90%, rgba(56, 189, 248, 0.28) 0, transparent 60%),
+      radial-gradient(at 12% 80%, rgba(34, 197, 94, 0.18) 0, transparent 60%),
+      linear-gradient(180deg, #fdfcff 0%, #f6f1ff 100%);
+  }
+
+  /* Subtle tinted background for the dashboard */
+  .dashboard-bg {
+    background:
+      radial-gradient(at 0% 0%, rgba(139, 92, 246, 0.08) 0, transparent 40%),
+      radial-gradient(at 100% 0%, rgba(56, 189, 248, 0.07) 0, transparent 40%),
+      #fafaff;
   }
 }
 

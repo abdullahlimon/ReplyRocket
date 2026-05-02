@@ -19,8 +19,8 @@ export default async function AdminLayout({
   if (!session) redirect("/dashboard");
 
   return (
-    <div className="flex min-h-screen bg-[#fafafb]">
-      <aside className="hidden w-60 shrink-0 flex-col border-r border-gray-100 bg-gradient-to-b from-violet-600 to-indigo-700 px-3 py-5 sm:flex">
+    <div className="flex min-h-screen dashboard-bg">
+      <aside className="hidden w-60 shrink-0 flex-col border-r border-violet-200 bg-gradient-to-b from-violet-600 to-indigo-700 px-3 py-5 sm:flex">
         <Link
           href="/admin"
           className="mb-7 flex items-center gap-2 px-2 text-base font-bold text-white"

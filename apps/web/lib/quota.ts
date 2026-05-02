@@ -23,7 +23,7 @@ export async function checkAndIncrementQuota(
   const row = Array.isArray(bumped) ? bumped[0] : bumped;
   return {
     ok: true,
-    used: row?.monthly_used ?? profile.monthly_used + 1,
-    quota: row?.monthly_quota ?? profile.monthly_quota,
+    used: row?.used ?? profile.monthly_used + 1,
+    quota: row?.quota ?? profile.monthly_quota,
   };
 }

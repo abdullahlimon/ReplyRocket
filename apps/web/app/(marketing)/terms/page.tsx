@@ -2,7 +2,8 @@ export const metadata = { title: "Terms of Service — ReplyRocket" };
 
 export default function Terms() {
   return (
-    <main className="mx-auto max-w-3xl px-6 py-16 prose prose-sm">
+    <main className="mesh-bg min-h-screen">
+      <article className="mx-auto max-w-3xl px-6 py-16 prose prose-sm">
       <h1>Terms of Service</h1>
       <p>
         <em>Last updated: {new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}</em>
@@ -69,6 +70,7 @@ export default function Terms() {
       <p>
         <a href="mailto:hello@replyrocket.io">hello@replyrocket.io</a>
       </p>
+      </article>
     </main>
   );
 }

@@ -81,7 +81,14 @@ export default async function PricingPage() {
                         </li>
                       ))}
                     </ul>
-                    <Link href="/login" className="mt-6">
+                    <Link
+                      href={
+                        plan.id === "free"
+                          ? "/login?next=/dashboard"
+                          : `/login?next=${encodeURIComponent(`/checkout?plan=${plan.id}`)}`
+                      }
+                      className="mt-6"
+                    >
                       <Button
                         className="w-full"
                         variant={plan.highlight ? "primary" : "outline"}

@@ -27,6 +27,8 @@ function LoginInner() {
   const params = useSearchParams();
   const next = params.get("next") || "/dashboard";
   const initialError = params.get("error");
+  const initialMode = params.get("mode") === "signup" ? "signup" : "signin";
+  const [mode, setMode] = useState<"signin" | "signup">(initialMode);
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">(
     initialError ? "error" : "idle",
@@ -121,9 +123,46 @@ function LoginInner() {
           </Link>
 
           <div className="rounded-2xl border border-gray-200/70 bg-white p-7 shadow-xl shadow-violet-900/5">
-            <h2 className="text-xl font-semibold tracking-tight">Welcome back</h2>
+            <div className="mb-5 inline-flex w-full rounded-xl bg-gray-100 p-1">
+              <button
+                onClick={() => {
+                  setMode("signin");
+                  setStatus("idle");
+                  setError(null);
+                }}
+                className={
+                  "flex-1 rounded-lg px-3 py-1.5 text-sm font-medium transition-colors " +
+                  (mode === "signin"
+                    ? "bg-white text-gray-900 shadow-sm"
+                    : "text-gray-500 hover:text-gray-900")
+                }
+              >
+                Sign in
+              </button>
+              <button
+                onClick={() => {
+                  setMode("signup");
+                  setStatus("idle");
+                  setError(null);
+                }}
+                className={
+                  "flex-1 rounded-lg px-3 py-1.5 text-sm font-medium transition-colors " +
+                  (mode === "signup"
+                    ? "bg-white text-gray-900 shadow-sm"
+                    : "text-gray-500 hover:text-gray-900")
+                }
+              >
+                Create account
+              </button>
+            </div>
+
+            <h2 className="text-xl font-semibold tracking-tight">
+              {mode === "signin" ? "Welcome back" : "Create your account"}
+            </h2>
             <p className="mt-1 text-sm text-gray-600">
-              Sign in to start generating replies.
+              {mode === "signin"
+                ? "Sign in to start generating replies."
+                : "Free during alpha · 30 replies/month included."}
             </p>
 
             <button
@@ -131,7 +170,9 @@ function LoginInner() {
               className="mt-6 inline-flex w-full items-center justify-center gap-2.5 rounded-lg border border-gray-200 bg-white px-4 py-2.5 text-sm font-medium shadow-sm transition-colors hover:bg-gray-50"
             >
               <GoogleIcon />
-              Continue with Google
+              {mode === "signin"
+                ? "Continue with Google"
+                : "Sign up with Google"}
             </button>
 
             <div className="my-5 flex items-center gap-3 text-xs text-gray-400">
@@ -165,11 +206,13 @@ function LoginInner() {
                 loading={status === "sending"}
                 className="w-full"
               >
-                Email me a magic link
+                {mode === "signin"
+                  ? "Email me a magic link"
+                  : "Email me a sign-up link"}
               </Button>
               {status === "sent" && (
                 <p className="rounded-lg bg-green-50 px-3 py-2 text-center text-sm text-green-700">
-                  Magic link sent. Check your inbox.
+                  Link sent. Check your inbox.
                 </p>
               )}
               {status === "error" && error && (
@@ -178,10 +221,17 @@ function LoginInner() {
                 </p>
               )}
             </form>
+
+            <p className="mt-5 text-center text-xs text-gray-500">
+              {mode === "signin"
+                ? <>New to ReplyRocket? <button onClick={() => setMode("signup")} className="font-medium text-brand-700 hover:underline">Create an account</button></>
+                : <>Already have an account? <button onClick={() => setMode("signin")} className="font-medium text-brand-700 hover:underline">Sign in</button></>}
+            </p>
           </div>
 
           <p className="mt-4 text-center text-xs text-gray-500">
-            By signing in, you agree to our{" "}
+            By {mode === "signin" ? "signing in" : "creating an account"}, you
+            agree to our{" "}
             <Link href="/terms" className="underline hover:text-gray-900">
               Terms
             </Link>{" "}

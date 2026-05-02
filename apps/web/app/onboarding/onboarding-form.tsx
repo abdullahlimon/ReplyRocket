@@ -85,8 +85,8 @@ export default function OnboardingForm() {
   const prompt = PROMPTS[step]!;
 
   return (
-    <main className="flex min-h-screen items-center justify-center px-6 py-10">
-      <Card className="w-full max-w-xl">
+    <main className="hero-bg flex min-h-screen items-center justify-center px-6 py-10">
+      <Card className="w-full max-w-xl shadow-xl shadow-violet-900/5">
         <CardBody className="p-8">
           <div className="mb-1 flex items-center justify-between text-xs text-gray-500">
             <span>Step {step + 1} of {PROMPTS.length}</span>

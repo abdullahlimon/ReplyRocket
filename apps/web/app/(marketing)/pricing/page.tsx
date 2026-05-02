@@ -11,8 +11,8 @@ export default async function PricingPage() {
   const plans = await getActivePlans();
 
   return (
-    <main className="bg-white">
-      <header className="sticky top-0 z-30 border-b border-gray-100/80 bg-white/80 backdrop-blur-sm">
+    <main className="mesh-bg">
+      <header className="sticky top-0 z-30 border-b border-violet-100/60 bg-white/70 backdrop-blur-sm">
         <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-6">
           <Link href="/" className="flex items-center gap-2 text-lg font-bold">
             <span>🚀</span>

@@ -76,7 +76,7 @@ const FAQ = [
 
 export default function Landing() {
   return (
-    <main className="bg-white">
+    <main className="mesh-bg">
       <Nav />
       <Hero />
       <PlatformStrip />
@@ -118,11 +118,11 @@ function Nav() {
 
 function Hero() {
   return (
-    <section className="relative overflow-hidden">
+    <section className="relative overflow-hidden hero-bg">
       <div className="absolute inset-0 grid-bg [mask-image:radial-gradient(ellipse_at_top,black_30%,transparent_70%)]" />
-      <div className="relative mx-auto max-w-5xl px-6 pb-16 pt-20 text-center sm:pt-28">
+      <div className="relative mx-auto max-w-5xl px-6 pb-20 pt-20 text-center sm:pt-28">
         <Badge variant="info" className="mb-6">
-          Free during alpha · 30 replies/month
+          ✨ Free during alpha · 30 replies/month
         </Badge>
         <h1 className="mx-auto max-w-3xl text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
           AI replies that{" "}
@@ -152,14 +152,17 @@ function Hero() {
 
 function PlatformStrip() {
   return (
-    <section className="border-y border-gray-100 bg-gray-50/50 py-10">
+    <section className="border-y border-violet-100/60 bg-white/60 py-10 backdrop-blur-sm">
       <div className="mx-auto max-w-6xl px-6">
-        <p className="text-center text-xs uppercase tracking-widest text-gray-500">
+        <p className="text-center text-xs uppercase tracking-widest text-violet-700/70">
           Works in
         </p>
         <ul className="mt-5 flex flex-wrap items-center justify-center gap-x-10 gap-y-4">
           {PLATFORMS.map((p) => (
-            <li key={p.name} className="flex items-center gap-2 text-sm font-medium text-gray-700">
+            <li
+              key={p.name}
+              className="flex items-center gap-2 rounded-full border border-violet-100 bg-white px-3 py-1.5 text-sm font-medium text-gray-700 shadow-sm"
+            >
               <span className="text-lg">{p.emoji}</span>
               {p.name}
             </li>

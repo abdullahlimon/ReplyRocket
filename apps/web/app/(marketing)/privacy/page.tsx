@@ -2,7 +2,8 @@ export const metadata = { title: "Privacy Policy — ReplyRocket" };
 
 export default function Privacy() {
   return (
-    <main className="mx-auto max-w-3xl px-6 py-16 prose prose-sm">
+    <main className="mesh-bg min-h-screen">
+      <article className="mx-auto max-w-3xl px-6 py-16 prose prose-sm">
       <h1>Privacy Policy</h1>
       <p>
         <em>Last updated: {new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}</em>
@@ -89,6 +90,7 @@ export default function Privacy() {
       <p>
         Questions? <a href="mailto:hello@replyrocket.io">hello@replyrocket.io</a>
       </p>
+      </article>
     </main>
   );
 }

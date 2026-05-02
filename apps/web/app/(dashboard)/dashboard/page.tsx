@@ -7,7 +7,7 @@ import { Card } from "@/components/ui/card";
 export default async function DashboardOverview({
   searchParams,
 }: {
-  searchParams: Promise<{ welcome?: string }>;
+  searchParams: Promise<{ welcome?: string; upgraded?: string }>;
 }) {
   const supabase = await createClient();
   const {
@@ -33,17 +33,32 @@ export default async function DashboardOverview({
 
   return (
     <div className="mx-auto max-w-5xl">
+      {params.upgraded && (
+        <div className="mb-6 rounded-2xl border border-emerald-200 bg-gradient-to-r from-emerald-50 via-emerald-50 to-teal-50 p-4 text-sm text-emerald-900">
+          🎉 <strong>You&rsquo;re upgraded.</strong> Higher quota and
+          priority support are active. Manage your plan in{" "}
+          <Link href="/settings" className="underline">
+            Settings
+          </Link>
+          .
+        </div>
+      )}
+
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
           <h1 className="text-2xl font-semibold tracking-tight">
             {params.welcome
               ? `You're all set${firstName ? `, ${firstName}` : ""}! 🚀`
-              : `Welcome back${firstName ? `, ${firstName}` : ""}.`}
+              : params.upgraded
+                ? `Welcome to ${profile?.plan ?? "Pro"}!`
+                : `Welcome back${firstName ? `, ${firstName}` : ""}.`}
           </h1>
           <p className="mt-1 text-sm text-gray-600">
             {params.welcome
               ? "Your voice profile is ready. Try it out below or install the extension."
-              : "Quick overview of your account."}
+              : params.upgraded
+                ? "Your new quota is live."
+                : "Quick overview of your account."}
           </p>
         </div>
         <Link href="/try">
@@ -89,16 +104,22 @@ export default async function DashboardOverview({
           <div className="p-6">
             <div className="flex items-center gap-2">
               <span className="text-xl">🚀</span>
-              <h2 className="text-base font-semibold">Connect your extension</h2>
+              <h2 className="text-base font-semibold">Install the extension</h2>
             </div>
             <p className="mt-2 text-sm text-gray-600">
-              After installing from the Chrome Web Store, click <em>Connect</em> in the popup.
+              30-second manual install. Once on the Web Store, this will be a
+              one-click button.
             </p>
-            <Link href="/auth/extension">
-              <Button className="mt-4" size="sm">
-                Connect extension
-              </Button>
-            </Link>
+            <div className="mt-4 flex flex-wrap gap-2">
+              <Link href="/install">
+                <Button size="sm">Install instructions →</Button>
+              </Link>
+              <a href="/replyrocket-extension.zip" download>
+                <Button size="sm" variant="outline">
+                  ⬇ Download .zip
+                </Button>
+              </a>
+            </div>
           </div>
         </Card>
       </div>

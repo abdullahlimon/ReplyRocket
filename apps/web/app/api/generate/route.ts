@@ -105,8 +105,15 @@ export async function POST(req: NextRequest) {
     completionTokens = response.completion_tokens;
     drafts = parseDrafts(response.text);
   } catch (e) {
+    const detail = (e as Error).message ?? String(e);
+    console.error("[/api/generate] LLM call failed:", detail);
+    // Refund the quota slot we just incremented since we never returned drafts.
+    await admin
+      .from("profiles")
+      .update({ monthly_used: Math.max(0, quota.used - 1) })
+      .eq("id", userId);
     return NextResponse.json(
-      { error: "generation_failed", detail: String(e) },
+      { error: "generation_failed", detail },
       { status: 502 },
     );
   }

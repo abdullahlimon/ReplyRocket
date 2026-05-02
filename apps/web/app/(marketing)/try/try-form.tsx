@@ -75,18 +75,36 @@ export default function TryForm({ signedIn }: { signedIn: boolean }) {
         error?: string;
         detail?: string;
       };
-      if (!res.ok) throw new Error(json.error || `HTTP ${res.status}`);
-      if (!json.drafts) throw new Error("No drafts returned");
+      if (!res.ok) {
+        const desc =
+          json.detail || json.error || `HTTP ${res.status}`;
+        toast.push({
+          variant: "error",
+          title: prettyError(json.error),
+          description: desc,
+        });
+        return;
+      }
+      if (!json.drafts) {
+        toast.push({ variant: "error", title: "No drafts returned" });
+        return;
+      }
       setDrafts(json.drafts);
     } catch (e) {
       toast.push({
         variant: "error",
-        title: "Generation failed",
+        title: "Network error",
         description: (e as Error).message,
       });
     } finally {
       setLoading(false);
     }
+  }
+
+  function prettyError(code?: string) {
+    if (code === "quota_exceeded") return "Monthly quota reached";
+    if (code === "unauthorized") return "Please sign in";
+    return "Generation failed";
   }
 
   function copyDraft(d: Draft) {

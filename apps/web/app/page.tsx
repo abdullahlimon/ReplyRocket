@@ -107,7 +107,7 @@ function Nav() {
           <Link href="/login" className="hidden text-sm text-gray-600 hover:text-gray-900 sm:inline px-2 py-1.5">
             Sign in
           </Link>
-          <Link href="/login">
+          <Link href="/install">
             <Button size="sm">Get the extension</Button>
           </Link>
         </div>
@@ -133,7 +133,7 @@ function Hero() {
           Get three high-quality reply drafts in your voice — in seconds.
         </p>
         <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
-          <Link href="/login">
+          <Link href="/install">
             <Button size="lg">Install free</Button>
           </Link>
           <Link href="/try">
@@ -335,7 +335,7 @@ function Cta() {
           Free to start. 30 replies / month. Setup takes 60 seconds.
         </p>
         <div className="mt-6 flex justify-center gap-3">
-          <Link href="/login">
+          <Link href="/install">
             <Button size="lg" variant="secondary" className="bg-white text-brand-700 hover:bg-white/90">
               Get the extension
             </Button>
